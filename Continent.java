@@ -4,6 +4,7 @@ public class Continent{
 
   private TreeMap<Integer, Node<Country>> graph;
   private RhineIo rhine;
+  private String name;
   private double adjMatrix[][];
   private int id;
 
@@ -16,16 +17,17 @@ public class Continent{
   public void populate(String entity, int maxNode){
     String[] countries = rhine.closestEntities(entity);
     int length = countries.length;
-    Country c= new Country(entity, entity);
-    Node<Country> capital = new Node<Country>(c, 0);
-    this.graph.put(0, capital);
+    this.name = entity;
+    //Country c= new Country(entity, entity);
+    //Node<Country> capital = new Node<Country>(c, 0);
+    //this.graph.put(0, capital);
     for(int i = 0; i<length;i++){
       if( i == maxNode){
           i = length;
       }else{
         String s = countries[i];
         int id = this.getSize();;
-        c = new Country(s, entity);
+        Country c = new Country(s, entity);
         Node<Country> country = new Node<Country>(c, id);
         this.graph.put(id,country);
       }
@@ -90,5 +92,14 @@ public class Continent{
 
   public double[][] getMatrix(){
     return adjMatrix;
+  }
+
+  @Override
+  public String toString(){
+    return this.name+"'s Graph: "+ graph;
+  }
+
+  public String getName(){
+    return this.name;
   }
 }
