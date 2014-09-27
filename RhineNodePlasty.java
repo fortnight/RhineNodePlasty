@@ -1,6 +1,6 @@
 public class RhineNodePlasty{
 
-  public RhineNodePlasty{
+  public RhineNodePlasty(){
 
   }
 
