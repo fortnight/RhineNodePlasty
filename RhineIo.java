@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 public class RhineIo{
 
-  private final String SPLIT = "\\\\\",\\\\\"";
+  private final String SPLIT = "\",\"";
   private String apiKey;
   private final String RHINEIO = "GET api.rhine.io/";
   public RhineIo(String apiKey){
@@ -29,9 +29,9 @@ public class RhineIo{
         String[] entities = line.split(":");
         String jumble = entities[1];
         clearEntities = jumble.split(SPLIT);
-        String[] cleanFront = clearEntities[0].split("\\\\\"");
+        String[] cleanFront = clearEntities[0].split("\"");
         clearEntities[0] = cleanFront[1];
-        String[] cleanBack = clearEntities[clearEntities.length-1].split("\\\\");
+        String[] cleanBack = clearEntities[clearEntities.length-1].split("\"");
         clearEntities[clearEntities.length-1] = cleanBack[0];
       }
     }catch(IOException io){
@@ -57,6 +57,7 @@ public class RhineIo{
     double distance= 0;
     try{
       String command = RHINEIO+apiKey+"/distance/"+entity1+"/"+entity2;
+      //System.out.println(command);
       Runtime runtime = Runtime.getRuntime();
       Process process = runtime.exec(command);
       is = process.getInputStream();
@@ -65,9 +66,10 @@ public class RhineIo{
       String line;
       line = br.readLine();
       //System.out.println(line);
-      String[] removeFront = line.split(":\"");
-      String [] removeEnd = removeFront[1].split("\"");
+      String[] removeFront = line.split("\":");
+      String [] removeEnd = removeFront[1].split("}");
       distance = Double.parseDouble(removeEnd[0]);
+      //System.out.println(distance);
     }catch(IOException io){
       io.printStackTrace();
     }finally{
