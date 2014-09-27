@@ -1,0 +1,46 @@
+Board
+    Variables:
+        ArrayList<Continents>
+    Methods:
+        Build_Board()
+        Set_Players()
+
+Continent
+    Variables:
+        ArrayList<Country> Territories
+        String Name
+    Methods:
+        Spawn_Countries(String Name)
+
+Country
+    Variables:
+        ArrayList<Country> Neighbors
+        String Name
+        Units Residents
+    Methods:
+        display_info()
+        declare_move(Country other)
+        attack()
+        move()
+        
+Player
+    Variables:
+        String Name
+        Continent Home
+        ArrayList<String> Generals
+        ArrayList<Units> Armies
+        ArrayList<Countries> Territories
+    Methods:
+        configure()
+        End_Turn()
+        Reinforcements()
+        Spawn_Units(String Category)
+
+Units
+    Variables:
+        String General
+        int General_Level
+        int Strength
+    Methods:
+        Reinforce()
+        Level_Up()
