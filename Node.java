@@ -2,12 +2,12 @@ import java.util.ArrayList;
 public class Node<T>{
 
   private T value;
-  private ArrayList<T> neighbors;
+  private ArrayList<Integer> neighbors;
   private int id;
   
   public Node(T value, int id){
     this.setValue(value);
-    this.neighbors = new ArrayList<T>();
+    this.neighbors = new ArrayList<Integer>();
     this.setId(id);
   }
 
@@ -27,11 +27,11 @@ public class Node<T>{
     return this.id;
   }
 
-  public void addNeighbor(T neighbor){
+  public void addNeighbor(int neighbor){
     neighbors.add(neighbor);
   }
 
-  public ArrayList<T> getNeighbors(){
+  public ArrayList<Integer> getNeighbors(){
     return neighbors;
   }
   

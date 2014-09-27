@@ -1,4 +1,5 @@
 import java.util.TreeMap;
+import java.util.ArrayList;
 public class Continent{
 
   private TreeMap<Integer, Node<String>> graph;
@@ -13,6 +14,8 @@ public class Continent{
   public void populate(String entity, int maxNode){
     String[] countries = rhine.closestEntities(entity);
     int length = countries.length;
+    Node<String> capital = new Node<String>(entity, 0);
+    this.graph.put(0, capital);
     for(int i = 0; i<length;i++){
       if( i == maxNode){
           i = length;
@@ -49,6 +52,34 @@ public class Continent{
         if(row != col){
           setDistance(row,col);
         }
+      }
+    }
+  }
+
+  private void setNeighbors(int start, int end){
+    graph.get(start).addNeighbor(end);
+    graph.get(end).addNeighbor(start);
+  }
+
+  public void addNewNeighbors(){
+    addNewNeighbors(1);
+  }
+
+  public void addNewNeighbors(int denom){
+    for(int row = 0; row <getSize()/denom; row++){
+      int neighborToAdd = -1;
+      double distance = 9999;
+      ArrayList<Integer> neighbors = graph.get(row).getNeighbors();
+      for(int col = 0; col < getSize()/denom; col++){
+        //System.out.println("addNewNeighbors: col");
+        double newDistance = this.getMatrix()[row][col];
+        if(col != row && !neighbors.contains(col) && newDistance <= distance){
+          distance = newDistance; 
+          neighborToAdd = col;
+        }
+      }
+      if(neighborToAdd != -1){
+        setNeighbors(row, neighborToAdd);  
       }
     }
   }
