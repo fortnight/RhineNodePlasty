@@ -2,19 +2,22 @@ import java.util.TreeMap;
 import java.util.ArrayList;
 public class Continent{
 
-  private TreeMap<Integer, Node<String>> graph;
+  private TreeMap<Integer, Node<Country>> graph;
   private RhineIo rhine;
   private double adjMatrix[][];
+  private int id;
 
   public Continent(String apiKey){
-    graph = new TreeMap<Integer, Node<String>>();
-    rhine = new RhineIo(apiKey);
+    this.graph = new TreeMap<Integer, Node<Country>>();
+    this.rhine = new RhineIo(apiKey);
+    this.id = 0;
   }
 
   public void populate(String entity, int maxNode){
     String[] countries = rhine.closestEntities(entity);
     int length = countries.length;
-    Node<String> capital = new Node<String>(entity, 0);
+    Country c= new Country(entity, entity);
+    Node<Country> capital = new Node<Country>(c, 0);
     this.graph.put(0, capital);
     for(int i = 0; i<length;i++){
       if( i == maxNode){
@@ -22,7 +25,8 @@ public class Continent{
       }else{
         String s = countries[i];
         int id = this.getSize();;
-        Node<String> country = new Node<String>(s, id);
+        c = new Country(s, entity);
+        Node<Country> country = new Node<Country>(c, id);
         this.graph.put(id,country);
       }
     }
@@ -30,7 +34,7 @@ public class Continent{
     adjMatrix = new double[dim][dim];
   }
  
-  public TreeMap<Integer, Node<String>> getGraph(){
+  public TreeMap<Integer, Node<Country>> getGraph(){
     return this.graph;
   }
 
@@ -39,8 +43,8 @@ public class Continent{
   }
   
   private void setDistance(int start, int end){
-    String startPoint = graph.get(start).getValue();
-    String endPoint = graph.get(end).getValue();
+    String startPoint = graph.get(start).getValue().getName();
+    String endPoint = graph.get(end).getValue().getName();
     double distance = rhine.distance(startPoint, endPoint);
     adjMatrix[start][end] = distance;
     adjMatrix[end][start] = distance;
