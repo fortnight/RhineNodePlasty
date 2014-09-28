@@ -6,7 +6,7 @@ public class JsonContinent{
 
   private final String NAME = "name";
   private final String SOURCE = "source";
-  private final String DESTINATION = "destination";
+  private final String DESTINATION = "target";
 
   public JSONObject createJSONContinent(Continent C){
     JSONObject cont = new JSONObject();
