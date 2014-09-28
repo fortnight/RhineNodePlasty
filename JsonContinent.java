@@ -1,7 +1,9 @@
 import org.json.simple.*;
 import java.util.TreeMap;
+import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
+
 public class JsonContinent{
 
   private final String NAME = "name";
@@ -32,6 +34,10 @@ public class JsonContinent{
     return cont;
   }
 
+  /*public JSONObject createJSONForGraph(Continent c){
+    return createJSONForGraph(c,0);
+  }*/
+
   public JSONObject createJSONForGraph(Continent c){
     JSONArray nodes = new JSONArray();
     JSONArray linkes = new JSONArray();
@@ -51,9 +57,36 @@ public class JsonContinent{
       }
     }
     graph.put("nodes", nodes);
+    graph.put("links",linkes);
+    return graph;
+
+  }
+
+  public JSONObject createJSONForMany(ArrayList<Continent> continents){
+    JSONArray nodes = new JSONArray();
+    JSONArray linkes = new JSONArray();
+    JSONObject graph = new JSONObject();
+    int modifier = 0;
+    for(Continent c:continents){
+      for(int key =0;key< c.getGraph().size();key++){
+        JSONObject entry = new JSONObject();
+        Node<Country> node = c.getGraph().get(key);
+        entry.put(NAME, node.getValue().getName());
+        nodes.add(entry); 
+        for(int neighbor: node.getNeighbors()){
+          if(neighbor >= key){
+            JSONObject line =new JSONObject();
+            line.put(SOURCE, key+modifier);
+            line.put(DESTINATION, neighbor+modifier);
+            linkes.add(line);
+          }
+        }
+      }
+      modifier+= c.getSize();
+    }
+    graph.put("nodes", nodes);
      graph.put("links",linkes);
      return graph;
-
   }
 
   public void writeToFile(String filename, JSONObject obj){
@@ -77,8 +110,17 @@ public class JsonContinent{
        c.populate(entity, max);
        c.findDistances();
        c.addNewNeighbors();
+       
+       Continent c2 = new Continent(apiKey);
+       c2.populate("Wall_Street", 4);
+       c2.findDistances();
+       c2.addNewNeighbors();
+
+       ArrayList<Continent> continents = new ArrayList<Continent>();
+       continents.add(c);
+       continents.add(c2);
        JsonContinent jc = new JsonContinent();
-       JSONObject work = jc.createJSONForGraph(c);
+       JSONObject work = jc.createJSONForMany(continents);
        System.out.println(work);
        jc.writeToFile(entity, work);
    } 
