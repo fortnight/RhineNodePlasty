@@ -62,6 +62,7 @@ public class JsonContinent{
 
   }
 
+
   public JSONObject createJSONForMany(ArrayList<Continent> continents){
     JSONArray nodes = new JSONArray();
     JSONArray linkes = new JSONArray();
@@ -76,8 +77,15 @@ public class JsonContinent{
         for(int neighbor: node.getNeighbors()){
           if(neighbor >= key){
             JSONObject line =new JSONObject();
+            //System.out.println("KEY: "+key);
+            //System.out.println("NEIGHBOR: "+neighbor);
+            //System.out.println("MODIFIER: "+modifier);
             line.put(SOURCE, key+modifier);
+            if(neighbor+modifier < c.getGraph().size()+modifier){
             line.put(DESTINATION, neighbor+modifier);
+            }else{
+               line.put(DESTINATION, neighbor);
+            }
             linkes.add(line);
           }
         }
