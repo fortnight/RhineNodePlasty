@@ -4,6 +4,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 public class JsonContinent{
 
+  private final String NAME = "name";
+  private final String SOURCE = "source";
+  private final String DESTINATION = "destination";
+
   public JSONObject createJSONContinent(Continent C){
     JSONObject cont = new JSONObject();
     cont.put("name", C.getName());
@@ -28,6 +32,30 @@ public class JsonContinent{
     return cont;
   }
 
+  public JSONObject createJSONForGraph(Continent c){
+    JSONArray nodes = new JSONArray();
+    JSONArray linkes = new JSONArray();
+    JSONObject graph = new JSONObject();
+    for(int key =0;key< c.getGraph().size();key++){
+      JSONObject entry = new JSONObject();
+      Node<Country> node = c.getGraph().get(key);
+      entry.put(NAME, node.getValue().getName());
+      nodes.add(entry); 
+      for(int neighbor: node.getNeighbors()){
+        if(neighbor >= key){
+          JSONObject line =new JSONObject();
+          line.put(SOURCE, key);
+          line.put(DESTINATION, neighbor);
+          linkes.add(line);
+        }
+      }
+    }
+    graph.put("nodes", nodes);
+     graph.put("links",linkes);
+     return graph;
+
+  }
+
   public void writeToFile(String filename, JSONObject obj){
     try{
       FileWriter file = new FileWriter(filename+".json");
@@ -50,7 +78,7 @@ public class JsonContinent{
        c.findDistances();
        c.addNewNeighbors();
        JsonContinent jc = new JsonContinent();
-       JSONObject work = jc.createJSONContinent(c);
+       JSONObject work = jc.createJSONForGraph(c);
        System.out.println(work);
        jc.writeToFile(entity, work);
    } 
