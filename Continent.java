@@ -18,16 +18,16 @@ public class Continent{
     String[] countries = rhine.closestEntities(entity);
     int length = countries.length;
     this.name = entity;
-    //Country c= new Country(entity, entity);
-    //Node<Country> capital = new Node<Country>(c, 0);
-    //this.graph.put(0, capital);
+    Country c= new Country(entity, entity);
+    Node<Country> capital = new Node<Country>(c, 0);
+    this.graph.put(0, capital);
     for(int i = 0; i<length;i++){
       if( i == maxNode){
           i = length;
       }else{
         String s = countries[i];
         int id = this.getSize();;
-        Country c = new Country(s, entity);
+        c = new Country(s, entity);
         Node<Country> country = new Node<Country>(c, id);
         this.graph.put(id,country);
       }
@@ -55,7 +55,7 @@ public class Continent{
   public void findDistances(){
     for(int row = 0; row < getSize(); row++){
       for(int col = row; col <getSize(); col++){
-        if(row != col){
+        if(row != col ){
           setDistance(row,col);
         }
       }
@@ -72,14 +72,14 @@ public class Continent{
   }
 
   public void addNewNeighbors(int denom){
-    for(int row = 0; row <getSize()/denom; row++){
+    for(int row = 1; row <getSize()/denom; row++){
       int neighborToAdd = -1;
       double distance = 9999;
       ArrayList<Integer> neighbors = graph.get(row).getNeighbors();
-      for(int col = 0; col < getSize()/denom; col++){
+      for(int col = 1; col < getSize()/denom; col++){
         //System.out.println("addNewNeighbors: col");
         double newDistance = this.getMatrix()[row][col];
-        if(col != row && !neighbors.contains(col) && newDistance <= distance){
+        if( col != row && !neighbors.contains(col) && newDistance <= distance){
           distance = newDistance; 
           neighborToAdd = col;
         }
@@ -88,6 +88,12 @@ public class Continent{
         setNeighbors(row, neighborToAdd);  
       }
     }
+    for(int i: graph.keySet()){
+      if(i !=0){
+        setNeighbors(0,i);
+      }
+    }
+    
   }
 
   public double[][] getMatrix(){
