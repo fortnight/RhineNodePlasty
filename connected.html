@@ -26,10 +26,10 @@ var svg = d3.select("body").append("svg")
 var force = d3.layout.force()
     .gravity(.000005)
     .distance(100)
-    .charge(-100)
+    .charge(0)
     .size([width, height]);
 
-d3.json("Google.json", function(error, json) {
+d3.json("RhineNodePlasty.json", function(error, json) {
   force
       .nodes(json.nodes)
       .links(json.links)
