@@ -68,15 +68,15 @@ public class Continent{
   }
 
   public void addNewNeighbors(){
-    addNewNeighbors(1);
+    addNewNeighbors(0);
   }
 
-  public void addNewNeighbors(int denom){
-    for(int row = 1; row <getSize()/denom; row++){
+  public void addNewNeighbors(int modifier){
+    for(int row = 1; row <getSize(); row++){
       int neighborToAdd = -1;
       double distance = 9999;
       ArrayList<Integer> neighbors = graph.get(row).getNeighbors();
-      for(int col = 1; col < getSize()/denom; col++){
+      for(int col = 1; col < getSize(); col++){
         //System.out.println("addNewNeighbors: col");
         double newDistance = this.getMatrix()[row][col];
         if( col != row && !neighbors.contains(col) && newDistance <= distance){
@@ -98,6 +98,37 @@ public class Continent{
 
   public double[][] getMatrix(){
     return adjMatrix;
+  }
+
+  public void connectTo(Continent another, int modifier){
+   double[][] bridge = new double[this.getSize()][another.getSize()];
+   //find distances
+   for(int myKey : this.getGraph().keySet()){
+     for(int anotherKey : another.getGraph().keySet()){
+       String firstValue = this.getGraph().get(myKey).getValue().getName();
+       String secondValue = another.getGraph().get(anotherKey).getValue().getName();
+       bridge[myKey][anotherKey] = this.rhine.distance(firstValue, secondValue);
+     }
+   }
+   //find lowestdistance
+   for(int row=0; row< this.getSize(); row++){
+     double distance =999999;
+     int lowest = -1;
+     for(int col = 0; col < another.getSize(); col++){
+       double newDistance = bridge[row][col];
+       if(newDistance < distance){
+         distance = newDistance;
+         lowest = col;
+       }
+     }
+     if(lowest != -1){
+        //System.out.println("LOWEST: "+lowest);
+        //System.out.println("MODIFIER: "+modifier);
+        graph.get(row).addNeighbor(lowest+modifier);
+        //graph.get(lowest).addNeighbor(row);
+     }
+   }
+   
   }
 
   @Override
