@@ -62,11 +62,12 @@ public class RhineNodePlasty{
           int max = reader.nextInt();
           model.makeContinent(entity, max);    
           System.out.println("Continent "+ entity+" created.");    
+          System.out.println("Please enter a command:\na: Add Continent \nd: Done");
         }/*else if(!command.equals("d")){
           System.out.println(command+" is not a command");
         }*/
        // System.out.println("Please enter a command:\na: Add Continent \nd: Done");
-
+        
       }
       int worldSize = model.getWorld().size();
       if(worldSize>0){
