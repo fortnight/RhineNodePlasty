@@ -15,8 +15,9 @@ Continent
 Country
     Variables:
         ArrayList<Country> Neighbors
+        ArrayList<Integer> Neighbor_distance
         String Name
-        Units Residents
+        String Owner
     Methods:
         display_info()
         declare_move(Country other)
